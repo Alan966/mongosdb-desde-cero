@@ -1,0 +1,141 @@
+Que son las Agregaciones 
+
+find({}) => id , cantidad, rango ...ect 
+
++ personalizacion 
+
+cursos
+
+profesor_id: 
+nombre: 
+costo: 
+
+AGREGACIONES 
+
+TUBERIAS     
+
+MAP REDUCE      
+
+VALOR UNICO O PROPOSITO UNICO 
+
+
+
+Agregate 
+db.cursos.aggregate()
+db.cursos.updateMany({}, [{$set: { costo:50, ultimaModificacion: "$$Now"}}])
+
+CANALIZACION POR TUBERIAS
+
+Cursos 
+profesor_id 
+nombre 
+estado 
+costo 
+
+CUSOS ACTIVOS 
+
+AGRUPAR POR PROFESOR 
+
+SUMEMOS EL COSTO DE SUS CURSOS 
+
+{}, {}, {} ...  => CURSOS ACTIVOS => {}, {}
+
+
+{}, {} ===> AGRUPAR POR PROFESOR ===> {} 
+
+
+{} => SUMEMOS EL COSTO DE SUS CURSOS 
+
+[{}, {}, {} ...]
+
+=> OK
+
+Esto no lo permite hacer el find esto lo permite hacer el aggregate
+db.cursos.aggregate(
+    [
+        {
+            $match: { 
+            estado: 'ACTIVO'
+        }
+        }, 
+        {$group: 
+        {
+            _id: "$profesor_id", 
+            costo: {
+            $sum: "$costo"
+            }
+        }
+    }]).pretty()
+
+    REPUESTA 
+    { "_id" : ObjectId("62ba0721de7722e31fd36fc9"), "costo" : 100 }
+    { "_id" : ObjectId("62ba26a6de7722e31fd36fcc"), "costo" : 200 }
+
+
+    En la documentacion ve a la parte de Aggregation 
+    en Aggregation Pipeline
+
+
+db.cursos.updateOne({_id:ObjectId('62ba274cde7722e31fd36fcd')}, { $set: { costo: 200, estado: 'ACTIVO'}})
+
+
+Map Reducers ejemplo simple 
+
+ESTADO = activo 
+    Cursos tiene el profesor 
+    Cantidad de cursos que tiene el profesor
+
+db.cursos.mapReduce(map, reduce, { })
+
+1. map => function() {emit(profesor_id, curso)}
+
+62ba0721de7722e31fd36fc9 : React 
+62ba26a6de7722e31fd36fcc : vue
+
+62ba0721de7722e31fd36fc9 : [React]
+62ba26a6de7722e31fd36fcc : [Vue]
+
+
+2. reduce => function (identificador, cursosAgrupados){
+    return { cursosAgrupados: cursosAgrupados}
+}
+
+3.out: 'salida', 
+  query: {estado: 'ACTIVO'},
+  finalize: retoques
+
+
+3.1 retoques => function (identificador, cursosAgrupados){
+    var contadorCursos = cursosAgrupados.length;
+    cursosAgrupados.cantidad = contadorCursos;
+    return cursosAgrupados;
+}
+
+PROFESORES_ID = []
+
+db.cursos.updateMany({}, [{ $set: {lanzamientos: [{ fecha: 2019, meses: [{ enero: 15, costo: 45, descripcion: 'version 1'}, { agosto: 20, costo: 150, description: 'version 2'}]}]}}])
+
+Creacion de una vista donde solo esta el profesor y el curso 
+
+db.createView("soloCursosProfesores", "cursos", [{ $project : {"profesor": "$profesor_id", "curso": "$nombre"}}])
+
+En el map reduce puedes agregar documentos mientras que en las vistas no por que como en su nombre se indican son vistas
+
+METODOS DE AGREGACION DE PROPOSITO UNICO 
+
+db.cursos.find()
+db.cursos.count()   Este es mas rapido padre 
+
+db.cursos.find().count() 
+
+db.cursos.countDocuments() 
+
+
+db.cursos.countDocuments({ estado: 'ACTIVO'}) es para contar los que cuentan con algun recurso
+
+db.cursos.find({}, { lanzamientos: 0}) es para que me retorne todo exepcto x 
+
+db.cursos.distinct('nombre') Es para que solo regrese el puro parametro que le estas pidiendo 
+
+db.cursos.distinct('nombre', { _id: ObjectId('62ba274cde7722e31fd36fcd')}) Es para que 
+regrese el parametro del objeto que le pides

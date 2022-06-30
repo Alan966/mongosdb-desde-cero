@@ -1,0 +1,91 @@
+mongod  .-Para correr mongo en tu maquina local 
+mongo   .-Para acceder a mongo
+help nos enseña que es todo los comando que le podemon pasar a la shell
+show dbs para listas todas las bases de datos 
+show databases para listar todas las bases de datos 
+use newDataBase sirve para crear una base de datos y al mismo timepo usarla 
+show dbs lista solo las que tienen colecciones y documentos 
+
+Creacion de Colecciones 
+una coleccion es igual a una tabla 
+db.createCollection("demo1") creas una colleccion 
+show collections para ver todas las colecciones 
+db.demo2.insert({}) si no existe la colleccion pero a la vez haces una inserccion este lo creara por si mismo 
+
+
+Documentos y tipos de datos 
+TABLA = COLECCION 
+FILA = DOCUMENTO 
+
+SQL 
+
+| Alan | alanuadalupe1665@gmail.com | 55234161119 | CDMX | 
+
+NO SQL (JSON)
+
+{
+    nombres: "Alan", 
+    correo: "alanuadalupe1665@gmail.com",
+    celular: 5523416119, 
+    ciudad: "BOL"
+    habilidades: [
+        {
+        react: ture, 
+        vue: true, 
+        mongo: true, 
+        angular: false
+    }, 
+    {
+        pwa: true, 
+
+    }
+    ]
+}
+{
+    nombres: "Alan", 
+    correo: "alanuadalupe1665@gmail.com",
+    celular: 5523416119, 
+    idiomas: ["Ingles", "Español", "Chino"]
+}
+{
+    nombres: "Alan", 
+    correo: "alanuadalupe1665@gmail.com",
+    celular: 5523416119, 
+    pais: "Mexico", 
+    habilidades: {
+        react: ture, 
+        vue: true, 
+        mongo: true, 
+        angular: false
+    }
+}
+
+Ventaja que tiene al usar db.createCollection
+
+db.createCollection("alumnos", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object", 
+            required: ["nombre", "dni"], 
+            properties:{
+                nombre:{
+                    bsonType: "string", 
+                    description: "No puede estar vacio"
+                }, 
+                dni: {
+                    bsonType: "int", 
+                    maximum: 1, 
+                    maximum: 9, 
+                    description: "El numero de documento debe star en el rango de 1 a 9 y es requerido"
+                }
+            }
+        }
+    }
+})
+
+
+para inserta una vez que requerimos el nombre y el dni necesitamos pasar de la sigueinte forma 
+db.alumnos.insert({nombre: 'Adrian', dni: NumberInt(5)})
+NumberInt para que acepte un numero 
+db.alumnos.find() para ver todos los alumnos que hay hasta el momento 
+

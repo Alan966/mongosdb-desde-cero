@@ -1,0 +1,61 @@
+para crear un Usuario lo que podemos hacer es 
+
+db.createUser({ user: 'adrian', pwd: passwordPrompt(), roles: [{ role: 'read', db: 'basedatos'}]})
+Te pedira la contrase 
+123456
+
+necesitas salrite de la base de datos+
+
+Para conectarnos a la base de datos los que necesitamos hacer son los sigueintes comandos : 
+mongo -u adrian -o -authenticationDatabase basedatos 
+despues pasas la contraseña 
+
+para que nos devuelva los usuarios utilizamos el siguiente comando 
+db.getUsers()
+
+
+REPLICASET 
+SISTEMA DE BLOCK
+Los replicaset son espejos de la replica original los cuales tiene lectura y escritura 
+estos son secundarios 
+
+
+
+CONTENEDORES O DOCKER 
+
+EQUIPO DE SISTEMA DEV 
+
+SO WINDOWS 10 10G RAM 2g 3g 4g 
+
+Virtual Box 
+
+SO => Debian => 2G RAM 
+SO => UBUNTU => 3G RAM 
+SO => CENTOS => 4G RAM 
+
+script, configuracion
+
+
+
+-------docker ------- 
+
+docker pull debian:9 
+docker pull debian:10 
+.......
+
+docker exec ... 27018
+docker exec ... 27019
+docker exec ... 27020
+
+-----------------------
+mongo 0 => primaria  
+
+mongo 1 => secundario
+
+mongo 2 => secundario
+
+para levantar 
+docker-compose up -d
+
+docker ps 
+docker exec -it mongo0 mongo

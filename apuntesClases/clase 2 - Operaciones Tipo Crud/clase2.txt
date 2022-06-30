@@ -1,0 +1,194 @@
+Para eliminar una base de dtaos 
+db.dropDatabase() con esto elimina la base de datos 
+Para ver mas informacion necesitar ver la documentacion 
+
+db.collection.drop() elimina la coleccion de la base de datos que deseas eliminar 
+db.demo2.insert({nombre: "eliminar"})
+db.demo2.deleteOne({ nombre: 'eliminar'}) con esto eliminaremos la primer documento que su nombre sea eliminar 
+db.demo2.deleteMany({nombre: 'eliminar'}) de esta forma si tengo mas de un documento con ese nombre los eliminar a todos 
+
+
+DELETE ONE [do1, do2, do3] = doc1
+DELTE MANY [doc1, doc2, do3] = []
+
+Eliminar por objectId 
+db.demo2.deleteOne({_id; ObjectId('2345678900987654')}) esto es para eliminar un documento con su id
+
+
+LISTADO DE DOCUMENTOS 
+db.demo2.find({dni: {$in: [5,6]}}) esto es para filtrar los documentos del 5 al 6 por su dni 
+db.demo2.find({ nombre: 'Adrian'}) esto lo que hace es filtrar por el nombre Adrian 
+db.demo2.find({dni: {$gt: 5}}) de esta forma lo que aremos es listar todos los que su dni sea mayor a 5
+db.demo2.find({dni: {$gte:5}}) esto lo que hace es listar los que son mayor o igual a 5
+db.demo2.find({dni: {$gte:5}, nombre: 'Adrian'}) lo que hara es que me retornara los mayores a 5 y aparte 
+que su nombre sea Adrian
+db.demo2.insert({nombre:'Alex', dni:NumberInt(8), habilidades: {react: true, angular: true, vue: true, pwa:false}})
+db.demo2.find({habilidades:{react: true, vue: true, angular: true, pwa: true}}) Es para buscar que y que 
+tengan el mismo objeto de una forma identica y organizada de la misma manera 
+db.demo2.find({"habilidades.react": true}) con esto nos encargamos de que minimo la 
+habilidad de react se encuentre en true
+db.demo2.find({nombre:'Alex', dni:NumberInt(6), 
+db.demo2.find({habilidades: {react:true, angular:true, vue: true, pwa: false}, })
+db.demo2.find({idiomas:['ingles', 'frances', 'castellano']})})
+db.demo2.find({idiomas: { $size: 3}}) para buscar el atributo el tamaño de documentos que tiene ese arreglo 
+db.demo2.find({}, {dni: 0, habilidades: 0,_id: 0, idiomas: 0})
+
+FILTRACION DE ELEMENTOS 
+db.demo2.find({},{dni:0, habilidades:0, _id:0, idiomas:0}) nos filtrara solo el atributo nombre 
+ya que los demas le emos dicho que no al poner un 0 enfrente de ellos
+db.demo2.find({idiomas:'ingles'}, {dni: 0})
+
+
+db.demo2.insert({ nombre: 'Celeste',dni: NumberInt(2), certifiaciones:[{lugar: 'Microsoft', nota:80}, {lugar: 'Empresa', nota: 90}, {lugar: 'Microsoft', nota: 20}]})
+
+
+
+ELEMATCH 
+
+db.demo2.find({certifiaciones: { $elemMatch: { lugar: 'Microsoft'}}}) lo que hace $elemMatch es 
+buscar los documentos que hagan coincidir con el parametro o atributo que le estas pasando 
+db.demo2.find({ certifiaciones: { $elemMatch: { lugar: 'Microsoft', nota: { $gte: 90}}}})
+
+
+PARA PEDIR UN INFORME DE ESTADISTICAS 
+db.profesores.find().explain('execuionStats')
+db.demo2.find().count() 
+db.demo2.find({ nombre: 'Adrian'}).count() 
+db.demo2.createIndex({ nombre: 1})
+db.profesores.find({ nombre: 'Adrian'}).explain('executionStats')
+
+
+CREAR INDICES 
+nombre: Adrian         IDNICE 
+dni: 7                 INDICE 
+certificaciones: 
+idiomas
+correo                 INDICE
+....
+
+nombre: Adrian 
+dni: 8 
+
+
+nombre: Cinthia 
+dni: 5
+
+db.demo2.getIndexes()
+db.demo2.find({ nombre: 'Adrian'})
+db.demo2.createIndex({nombre:1, dni: -1})
+
+
+PARA CREAR NUEVOS DOCUMENTOS METODOS 
+db.demo2.insertOne({ nombre: 'Cecilia', dni: NumerInt(2)}) este me devuelve la respuesta de se creo y nos devuelve el Id 
+db.demo2.insert({ nombre: 'Carmen', dni: NumberInt(2)}) Este solo me dice que se creo 
+db.demo2.insertMany([{nombre:'Elio', dni: NumberInt(2)}, {nombre: 'Pedro', dni: NumberInt(7)}]) Esto es para registrar varios 
+necesita que se le pase un array donde cada uno va a ser un objeto 
+
+
+Subdocumentos y cursores
+
+ SQL (FK)
+
+ Profesores 
+
+ Cursos -> profesores_id 
+
+ 1.
+
+ Profesores 
+{
+    _id: ObjectId('234565436543215')
+    nombre: 'Elio', 
+    dni: 5
+}
+
+
+ Cursos 
+
+ {
+    nombre: 'React', 
+    profesor_id: {
+        nombre: 'Elio', 
+        dni:5, 
+        ...
+    }
+ }
+
+ {
+    nombre: 'React', 
+    profesor_id: {
+        nombre: 'Elio', 
+        dni:5, 
+        ...
+    }, {
+        nombre: 'Adrian', 
+        dni:5, 
+        ...
+    }
+ }
+
+CURSORES 
+var cursor = db.cursos.find() 
+
+
+while(cursor.hasNext()){
+    var objeto = cursor.next(); 
+    if(objeto.profesor_id == '62ba058ade7722e31fd36fc6'){
+        print(objeto.nombre);
+    }
+}
+
+
+MODIFICAR DOCUMENTOS 
+db.cursos.updateOne({_id: ObjectId('62ba0b75de7722e31fd36fcb')}, {
+    $set:{ profesor_id:ObjectId('62ba0721de7722e31fd36fc9')}
+}) para modificar documentos 
+
+db.cursos.updateOne({_id: ObjectId('62ba0b75de7722e31fd36fcb')}, {
+    $set:{ profesor_id:ObjectId('62ba0721de7722e31fd36fc9'), lugarDicto: 'LA PAZ'}
+})
+
+db.cursos.updateMany({}, [{ $set:{estado:'ACTIVO', ultimaModificacion: "$$NOW"}}]) Sirve para modificarlos a todos 
+
+
+
+CREAR OK 
+
+UPDATE FALLA 
+
+ELIMINAR OK 
+
+COMMIT 
+
+ROLLBACK
+var idUnico = ObjectId() 
+db.profesor.insert({_id:idUnico, nombre: 'Max', NumberInt(5)})
+
+Insertar o modificar documentos con transacciones 
+
+var session = db.getMongo().startSession({ readPreference: { mode: "primary"}})
+
+var profesores = session.getDatabase("edteam").profesores; 
+
+session.startTransaction( { readConcern: {level: 'local'}, writeConcern: {w: 'majority'}})
+
+try{
+    profesores.insertOne({nombre: "ejemplo transaccion", dni: NumberInt(9999)})
+    print('Agrego')
+}catch(error){
+    print('Error no deberia guardar')
+    session.abortTransaction() 
+    throw error
+}
+
+session:commitTransaction()
+session.endSession()
+
+
+1. SESSION 
+2. INICIARTRANSACION() COMMITTRANSACTION, abortTransaction
+3. endSession
+
+
+
+

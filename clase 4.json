@@ -1,0 +1,57 @@
+config = {
+    "_id": "rs0", 
+    "members":[{
+        "_id": 0, 
+        "host": "mongo0:27017"
+    }, 
+    {
+        "_id": 1, 
+        "host":"mongo1:27017"
+    }, 
+    {
+        "_id":2, 
+        "host": "mongo2:27017"
+    }
+]
+}
+ 
+rs.initiate(config)
+
+rs.initiate(
+   {
+      _id: "rs0",
+      version: 1,
+      members: [
+         { _id: 0, host : "mongo0:27017" },
+         { _id: 1, host : "mongo1:27017"},
+         { _id: 2, host : "mongo2:27017" }
+      ]
+   }
+)
+
+
+// REPLICA SET
+// 1P       1S      1S   4G
+// 100G     100G    100G
+
+// SHARDING 
+
+// mongos
+
+// 1P       1S      1S   4G
+// 33G     33G    33G     1shard
+
+
+// 1P       1S      1S  4G
+// 33G     33G    33G     2shard
+
+
+// 1P       1S      1S  4G
+// 33G     33G    33G     3shard
+
+APLICATION => Driver para mongo => RS
+
+
+APLICATION => Driver para mongo => MONGOS => SHARDING
+                                    
+                                    Config Server 
